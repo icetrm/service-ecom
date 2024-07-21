@@ -1,0 +1,31 @@
+server:
+    port: 8080
+    error:
+        include-message: always
+
+cors:
+    allowed-origins: "*"
+    allowed-methods: "*"
+    allowed-headers: "*"
+    exposed-headers: "*"
+
+spring:
+    application:
+        name: ecom
+    datasource:
+        url: 'jdbc:mysql://localhost:3306/ecom'
+        username: root
+        password: 123456
+        driverClassName: com.mysql.cj.jdbc.Driver
+    jpa:
+#        hibernate:
+#            ddl-auto: create
+        properties:
+            hibernate:
+                dialect: org.hibernate.dialect.MySQLDialect
+jwt:
+    #https://pinetools.com/random-string-generator
+    signingKey: FEVVW85N51SMSRWMLH2QTWE467SASW6VHY4T4MGPCTNEV0XBZLG26JUFS18Z76YH
+    issuer: ECOM
+    tokenExpInSecs: 3600
+    refreshTokenExpInSecs: 7200
