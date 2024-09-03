@@ -5,6 +5,7 @@ import com.cooperation.ecom.security.domain.UserSecurityContext;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Component;
@@ -50,7 +51,7 @@ public class JwtTokenUtil implements Serializable {
 	private String doGenerateToken(Map<String, Object> claims, String audience) {
 		final Date createdDate = roundUpDate(new Date());
 		final Date expirationDate = calculateExpirationDate(createdDate, jwtConfiguration.getTokenExpInSecs());
-
+		SecretKey secretKey = getSignInKey();
 		return Jwts.builder()
 				.header().type("JWT").and()
 				.claims(claims)
@@ -59,7 +60,7 @@ public class JwtTokenUtil implements Serializable {
 				.audience().add(audience)
 				.and()
 				.expiration(expirationDate)
-				.signWith(getSignInKey(), Jwts.SIG.HS256)
+				.signWith(secretKey)
 				.compact();
 	}
 	
@@ -170,6 +171,7 @@ public class JwtTokenUtil implements Serializable {
 	}
 
 	private SecretKey getSignInKey() {
+//		return Keys.hmacShaKeyFor(jwtConfiguration.getSigningKey().getBytes());
 		String algorithm = "HmacSHA256";
 		return new SecretKeySpec(jwtConfiguration.getSigningKey().getBytes(), algorithm);
 	}
