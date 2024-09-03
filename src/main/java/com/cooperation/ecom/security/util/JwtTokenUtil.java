@@ -5,13 +5,12 @@ import com.cooperation.ecom.security.domain.UserSecurityContext;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
@@ -171,8 +170,8 @@ public class JwtTokenUtil implements Serializable {
 	}
 
 	private SecretKey getSignInKey() {
-		byte[] keyBytes = Decoders.BASE64.decode(jwtConfiguration.getSigningKey());
-		return Keys.hmacShaKeyFor(keyBytes);
+		String algorithm = "HmacSHA256";
+		return new SecretKeySpec(jwtConfiguration.getSigningKey().getBytes(), algorithm);
 	}
 
 }
